@@ -12,6 +12,7 @@ const connection = mysql.createPool({
     database: 'chandrajournal'
 });
 
+// Body parser
 app.use(bodyParser.json({ limit: '50mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
 app.use(express.json());
