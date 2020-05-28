@@ -128,6 +128,23 @@ app.post('/user-signup', bodyParser.json(), (req, res) => {
 
 //ENTRIES APIs
 
+app.post('/create-entry', bodyParser.json(), (req, res) => {
+    const form = req.body;
+    var sql = "INSERT INTO `entries` (`EntryNo`,`Title`, `Content`, `CreatedTimestamp`,`UserId`) " +
+        "VALUES (NULL, '" + form.Title + "','" + form.content + "',CURRENT_TIMESTAMP," +
+        " '" + form.userId+ "')";
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ "error": err });
+        }
+        else {
+            console.log(result);
+            res.send(result);
+        }
+    });
+});
+
 app.post('/get-entries', bodyParser.json(), (req, res) => {
     const id = req.body.id;
     const page = req.body.page;
