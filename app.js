@@ -87,11 +87,17 @@ app.post('/user-signup', bodyParser.json(), (req, res) => {
 
 app.post('/get-entries',bodyParser.json(), (req, res) => {
     const id = req.body.id;
-    const page = req.body.id;
+    const page = req.body.page;
     const limit = 6;
     const offset = (page - 1)  * limit;
-    var totalRows;
+    var totalPages;
     var results = {};
+    var sqlCount = "SELECT `EntryNo`,"+
+                    " `Title`," +
+                    " `Content`," +
+                    " `CreatedTimestamp`"+
+                    " FROM `entries` WHERE `UserId` = '"+id+"'";
+
     var sql = "SELECT `EntryNo`,"+
                     " `Title`," +
                     " `Content`," +
@@ -99,13 +105,15 @@ app.post('/get-entries',bodyParser.json(), (req, res) => {
                     " FROM `entries` WHERE `UserId` = '"+id+"'"+
                     " ORDER BY `CreatedTimestamp` DESC"+
                     " LIMIT "+limit+" OFFSET "+offset;
-    connection.query(sql, (err, result) => {
+
+    connection.query(sqlCount, (err, result) => {
         if (err) {
             console.log(err);
             res.json({ "error": err });
+            res.end("Error occured.");
         }
         else {
-            totalRows = result.length;
+            totalPages = Math.ceil(result.length/limit);
         }
     });
 
@@ -117,7 +125,7 @@ app.post('/get-entries',bodyParser.json(), (req, res) => {
         else {
             console.log(rows);
             results['page'] = page;
-            results['totalRows'] = totalRows;
+            results['totalPages'] = totalPages;
             results['rows'] = rows;
             res.send(results);
         }
