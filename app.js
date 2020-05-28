@@ -27,7 +27,7 @@ app.use(function (req, res, next) {
 });
 
 //Check if app is served correctly
-app.get('/', (req, res) => 
+app.get('/', (req, res) =>
     res.send('App served successfully!'));
 
 app.get('/test', (req, res) => {
@@ -47,13 +47,34 @@ app.get('/test', (req, res) => {
 //USER APIs
 app.get('/user-login/:form', (req, res) => {
     const form = JSON.parse(req.params.form);
-    var sql = "SELECT `UserId`,"+
-                    " `UserName`," +
-                    " `FirstName`," +
-                    " `LastName`,"+
-                    " `EmailAddress`"+
-                    " FROM `users` WHERE `EmailAddress` = '"+form.email+"'"+
-                    " AND `Password` = '"+form.password+"'";
+    var sql = "SELECT `UserId`," +
+        " `UserName`," +
+        " `FirstName`," +
+        " `LastName`," +
+        " `EmailAddress`" +
+        " FROM `users` WHERE `EmailAddress` = '" + form.email + "'" +
+        " AND `Password` = '" + form.password + "'";
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ "error": err });
+        }
+        else {
+            console.log(result);
+            res.send(result);
+        }
+    });
+});
+
+app.get('/user-details/:email', (req, res) => {
+    const email = req.params.email;
+    console.log(email);
+    var sql = "SELECT `UserId`," +
+        " `UserName`," +
+        " `FirstName`," +
+        " `LastName`," +
+        " `EmailAddress`" +
+        " FROM `users` WHERE `EmailAddress` = '" + email + "'";
     connection.query(sql, (err, result) => {
         if (err) {
             console.log(err);
@@ -68,9 +89,9 @@ app.get('/user-login/:form', (req, res) => {
 
 app.post('/user-signup', bodyParser.json(), (req, res) => {
     const form = req.body;
-    var sql = "INSERT INTO `users` (`UserId`,`UserName`, `FirstName`, `LastName`,`EmailAddress`, `Password`) "+
-            "VALUES (NULL, '"+form.username+"','"+ form.firstname + "','"+form.lastname+"',"+
-            " '"+form.email+"','"+form.password+"')";
+    var sql = "INSERT INTO `users` (`UserId`,`UserName`, `FirstName`, `LastName`,`EmailAddress`, `Password`) " +
+        "VALUES (NULL, '" + form.username + "','" + form.firstname + "','" + form.lastname + "'," +
+        " '" + form.email + "','" + form.password + "')";
     connection.query(sql, (err, result) => {
         if (err) {
             console.log(err);
