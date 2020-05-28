@@ -191,9 +191,16 @@ app.post('/search-entries',bodyParser.json(), (req, res) => {
                     " `Title`," +
                     " `Content`," +
                     " `CreatedTimestamp`"+
-                    " FROM `entries` WHERE `UserId` = '"+id+"' AND WHERE `Title` LIKE '%"+searchKey+"'%";
+                    " FROM `entries` WHERE `UserId` = '"+id+"' AND `Title` LIKE '%"+searchKey+"%'";
 
-    
+    var sql = "SELECT `EntryNo`,"+
+                    " `Title`," +
+                    " `Content`," +
+                    " `CreatedTimestamp`"+
+                    " FROM `entries` WHERE `UserId` = '"+id+"' AND `Title` LIKE '%"+searchKey+"%'"+
+                    " ORDER BY `CreatedTimestamp` DESC"+
+                    " LIMIT "+limit+" OFFSET "+offset;
+
     connection.query(sqlCount, (err, result) => {
         if (err) {
             console.log(err);
@@ -205,7 +212,19 @@ app.post('/search-entries',bodyParser.json(), (req, res) => {
         }
     });
 
-    
+    connection.query(sql, (err, rows) => {
+        if (err) {
+            console.log(err);
+            res.json({ "error": err });
+        }
+        else {
+            console.log(rows);
+            results['page'] = page;
+            results['totalPages'] = totalPages;
+            results['rows'] = rows;
+            res.send(results);
+        }
+    });
 });
 
 
