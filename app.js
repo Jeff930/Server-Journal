@@ -83,4 +83,31 @@ app.post('/user-signup', bodyParser.json(), (req, res) => {
     });
 });
 
+//ENTRIES APIs
+
+app.get('/recent-entries',bodyParser.json(), (req, res) => {
+    const id = req.body.id;
+    const page = req.body.id;
+    const limit = 4;
+    const offset = (page - 1)  * limit;
+    var sql = "SELECT `EntryNo`,"+
+                    " `Title`," +
+                    " `Content`," +
+                    " `CreatedTimestamp`"+
+                    " FROM `entries` WHERE `UserId` = '"+id+"'"+
+                    " LIMIT "+limit+" OFFSET "+offset;
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ "error": err });
+        }
+        else {
+            console.log(result);
+            res.send(result);
+        }
+    });
+});
+
+
+
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`))
