@@ -111,9 +111,9 @@ app.post('/update-user-details', bodyParser.json(), (req, res) => {
 
 app.post('/user-signup', bodyParser.json(), (req, res) => {
     const form = req.body;
-    var sql = "INSERT INTO `users` (`UserId`,`UserName`, `FirstName`, `LastName`,`EmailAddress`, `Password`) " +
+    var sql = "INSERT INTO `users` (`UserId`,`UserName`, `FirstName`, `LastName`,`EmailAddress`, `Password`,`CreatedTimestamp) " +
         "VALUES (NULL, '" + form.username + "','" + form.firstname + "','" + form.lastname + "'," +
-        " '" + form.email + "','" + form.password + "')";
+        " '" + form.email + "','" + form.password + "',CURRENT_TIMESTAMP)";
     connection.query(sql, (err, result) => {
         if (err) {
             console.log(err);
