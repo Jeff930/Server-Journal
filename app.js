@@ -331,6 +331,14 @@ app.post('/filter-entries', bodyParser.json(), (req, res) => {
         " `CreatedTimestamp`" +
         " FROM `entries` WHERE `UserId` = '" + id + "' AND date(`CreatedTimestamp`) = '"+date+"'";
 
+    var sql = "SELECT `EntryNo`," +
+        " `Title`," +
+        " `Content`," +
+        " `CreatedTimestamp`" +
+        " FROM `entries` WHERE `UserId` = '" + id + "'" +
+        " ORDER BY `CreatedTimestamp` ASC" +
+        " LIMIT " + limit + " OFFSET " + offset;
+
     connection.query(sqlCount, (err, result) => {
         if (err) {
             console.log(err);
@@ -339,6 +347,20 @@ app.post('/filter-entries', bodyParser.json(), (req, res) => {
         }
         else {
             totalPages = Math.ceil(result.length / limit);
+        }
+    });
+
+    connection.query(sql, (err, rows) => {
+        if (err) {
+            console.log(err);
+            res.json({ "error": err });
+        }
+        else {
+            console.log(rows);
+            results['page'] = page;
+            results['totalPages'] = totalPages;
+            results['rows'] = rows;
+            res.send(results);
         }
     });
 });
