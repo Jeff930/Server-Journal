@@ -335,8 +335,7 @@ app.post('/filter-entries', bodyParser.json(), (req, res) => {
         " `Title`," +
         " `Content`," +
         " `CreatedTimestamp`" +
-        " FROM `entries` WHERE `UserId` = '" + id + "'" +
-        " ORDER BY `CreatedTimestamp` ASC" +
+        " FROM `entries` WHERE `UserId` = '" + id + "' AND date(`CreatedTimestamp`) = '"+date+"'"+
         " LIMIT " + limit + " OFFSET " + offset;
 
     connection.query(sqlCount, (err, result) => {
