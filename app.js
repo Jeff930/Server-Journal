@@ -68,7 +68,7 @@ app.get('/user-login/:form', (req, res) => {
 
 app.get('/user-details/:email', (req, res) => {
     const email = req.params.email;
-    console.log(email);
+    // console.log(email);
     var sql = "SELECT `UserId`," +
         " `UserName`," +
         " `FirstName`," +
@@ -77,11 +77,33 @@ app.get('/user-details/:email', (req, res) => {
         " FROM `users` WHERE `EmailAddress` = '" + email + "'";
     connection.query(sql, (err, result) => {
         if (err) {
+            // console.log(err);
+            res.json({ "error": err });
+        }
+        else {
+            // console.log(result);
+            res.send(result);
+        }
+    });
+});
+
+app.post('/update-user-details', bodyParser.json(), (req, res) => {
+    const form = req.body;
+    console.log("Form: ",form);
+    var sql = "UPDATE users SET" +
+        " `UserName` = '" + form.username + "'," +
+        " `FirstName` = '" + form.firstname + "'," +
+        " `LastName` = '" + form.lastname + "'," +
+        " `EmailAddress` = '" + form.email + "'" +
+        "  WHERE `UserId` = '" + form.userid + "'";
+
+    connection.query(sql, (err, result) => {
+        if (err) {
             console.log(err);
             res.json({ "error": err });
         }
         else {
-            console.log(result);
+            console.log("Result: ", result);
             res.send(result);
         }
     });
@@ -106,26 +128,26 @@ app.post('/user-signup', bodyParser.json(), (req, res) => {
 
 //ENTRIES APIs
 
-app.post('/get-entries',bodyParser.json(), (req, res) => {
+app.post('/get-entries', bodyParser.json(), (req, res) => {
     const id = req.body.id;
     const page = req.body.page;
     const limit = 6;
-    const offset = (page - 1)  * limit;
+    const offset = (page - 1) * limit;
     var totalPages;
     var results = {};
-    var sqlCount = "SELECT `EntryNo`,"+
-                    " `Title`," +
-                    " `Content`," +
-                    " `CreatedTimestamp`"+
-                    " FROM `entries` WHERE `UserId` = '"+id+"'";
+    var sqlCount = "SELECT `EntryNo`," +
+        " `Title`," +
+        " `Content`," +
+        " `CreatedTimestamp`" +
+        " FROM `entries` WHERE `UserId` = '" + id + "'";
 
-    var sql = "SELECT `EntryNo`,"+
-                    " `Title`," +
-                    " `Content`," +
-                    " `CreatedTimestamp`"+
-                    " FROM `entries` WHERE `UserId` = '"+id+"'"+
-                    " ORDER BY `CreatedTimestamp` DESC"+
-                    " LIMIT "+limit+" OFFSET "+offset;
+    var sql = "SELECT `EntryNo`," +
+        " `Title`," +
+        " `Content`," +
+        " `CreatedTimestamp`" +
+        " FROM `entries` WHERE `UserId` = '" + id + "'" +
+        " ORDER BY `CreatedTimestamp` DESC" +
+        " LIMIT " + limit + " OFFSET " + offset;
 
     connection.query(sqlCount, (err, result) => {
         if (err) {
@@ -134,7 +156,7 @@ app.post('/get-entries',bodyParser.json(), (req, res) => {
             res.end("Error occured.");
         }
         else {
-            totalPages = Math.ceil(result.length/limit);
+            totalPages = Math.ceil(result.length / limit);
         }
     });
 
@@ -153,26 +175,26 @@ app.post('/get-entries',bodyParser.json(), (req, res) => {
     });
 });
 
-app.post('/get-entries',bodyParser.json(), (req, res) => {
+app.post('/get-entries', bodyParser.json(), (req, res) => {
     const id = req.body.id;
     const page = req.body.page;
     const limit = 6;
-    const offset = (page - 1)  * limit;
+    const offset = (page - 1) * limit;
     var totalPages;
     var results = {};
-    var sqlCount = "SELECT `EntryNo`,"+
-                    " `Title`," +
-                    " `Content`," +
-                    " `CreatedTimestamp`"+
-                    " FROM `entries` WHERE `UserId` = '"+id+"'";
+    var sqlCount = "SELECT `EntryNo`," +
+        " `Title`," +
+        " `Content`," +
+        " `CreatedTimestamp`" +
+        " FROM `entries` WHERE `UserId` = '" + id + "'";
 
-    var sql = "SELECT `EntryNo`,"+
-                    " `Title`," +
-                    " `Content`," +
-                    " `CreatedTimestamp`"+
-                    " FROM `entries` WHERE `UserId` = '"+id+"'"+
-                    " ORDER BY `CreatedTimestamp` DESC"+
-                    " LIMIT "+limit+" OFFSET "+offset;
+    var sql = "SELECT `EntryNo`," +
+        " `Title`," +
+        " `Content`," +
+        " `CreatedTimestamp`" +
+        " FROM `entries` WHERE `UserId` = '" + id + "'" +
+        " ORDER BY `CreatedTimestamp` DESC" +
+        " LIMIT " + limit + " OFFSET " + offset;
 
     connection.query(sqlCount, (err, result) => {
         if (err) {
@@ -181,7 +203,7 @@ app.post('/get-entries',bodyParser.json(), (req, res) => {
             res.end("Error occured.");
         }
         else {
-            totalPages = Math.ceil(result.length/limit);
+            totalPages = Math.ceil(result.length / limit);
         }
     });
 
@@ -200,27 +222,27 @@ app.post('/get-entries',bodyParser.json(), (req, res) => {
     });
 });
 
-app.post('/search-entries',bodyParser.json(), (req, res) => {
+app.post('/search-entries', bodyParser.json(), (req, res) => {
     const id = req.body.id;
     const page = req.body.page;
     const searchKey = req.body.searchKey;
     const limit = 6;
-    const offset = (page - 1)  * limit;
+    const offset = (page - 1) * limit;
     var totalPages;
     var results = {};
-    var sqlCount = "SELECT `EntryNo`,"+
-                    " `Title`," +
-                    " `Content`," +
-                    " `CreatedTimestamp`"+
-                    " FROM `entries` WHERE `UserId` = '"+id+"' AND `Title` LIKE '%"+searchKey+"%'";
+    var sqlCount = "SELECT `EntryNo`," +
+        " `Title`," +
+        " `Content`," +
+        " `CreatedTimestamp`" +
+        " FROM `entries` WHERE `UserId` = '" + id + "' AND `Title` LIKE '%" + searchKey + "%'";
 
-    var sql = "SELECT `EntryNo`,"+
-                    " `Title`," +
-                    " `Content`," +
-                    " `CreatedTimestamp`"+
-                    " FROM `entries` WHERE `UserId` = '"+id+"' AND `Title` LIKE '%"+searchKey+"%'"+
-                    " ORDER BY `CreatedTimestamp` DESC"+
-                    " LIMIT "+limit+" OFFSET "+offset;
+    var sql = "SELECT `EntryNo`," +
+        " `Title`," +
+        " `Content`," +
+        " `CreatedTimestamp`" +
+        " FROM `entries` WHERE `UserId` = '" + id + "' AND `Title` LIKE '%" + searchKey + "%'" +
+        " ORDER BY `CreatedTimestamp` DESC" +
+        " LIMIT " + limit + " OFFSET " + offset;
 
     connection.query(sqlCount, (err, result) => {
         if (err) {
@@ -229,7 +251,7 @@ app.post('/search-entries',bodyParser.json(), (req, res) => {
             res.end("Error occured.");
         }
         else {
-            totalPages = Math.ceil(result.length/limit);
+            totalPages = Math.ceil(result.length / limit);
         }
     });
 
@@ -248,26 +270,26 @@ app.post('/search-entries',bodyParser.json(), (req, res) => {
     });
 });
 
-app.post('/sort-entries-asc',bodyParser.json(), (req, res) => {
+app.post('/sort-entries-asc', bodyParser.json(), (req, res) => {
     const id = req.body.id;
     const page = req.body.page;
     const limit = 6;
-    const offset = (page - 1)  * limit;
+    const offset = (page - 1) * limit;
     var totalPages;
     var results = {};
-    var sqlCount = "SELECT `EntryNo`,"+
-                    " `Title`," +
-                    " `Content`," +
-                    " `CreatedTimestamp`"+
-                    " FROM `entries` WHERE `UserId` = '"+id+"'";
+    var sqlCount = "SELECT `EntryNo`," +
+        " `Title`," +
+        " `Content`," +
+        " `CreatedTimestamp`" +
+        " FROM `entries` WHERE `UserId` = '" + id + "'";
 
-    var sql = "SELECT `EntryNo`,"+
-                    " `Title`," +
-                    " `Content`," +
-                    " `CreatedTimestamp`"+
-                    " FROM `entries` WHERE `UserId` = '"+id+"'"+
-                    " ORDER BY `CreatedTimestamp` ASC"+
-                    " LIMIT "+limit+" OFFSET "+offset;
+    var sql = "SELECT `EntryNo`," +
+        " `Title`," +
+        " `Content`," +
+        " `CreatedTimestamp`" +
+        " FROM `entries` WHERE `UserId` = '" + id + "'" +
+        " ORDER BY `CreatedTimestamp` ASC" +
+        " LIMIT " + limit + " OFFSET " + offset;
 
     connection.query(sqlCount, (err, result) => {
         if (err) {
@@ -276,7 +298,7 @@ app.post('/sort-entries-asc',bodyParser.json(), (req, res) => {
             res.end("Error occured.");
         }
         else {
-            totalPages = Math.ceil(result.length/limit);
+            totalPages = Math.ceil(result.length / limit);
         }
     });
 
