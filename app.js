@@ -227,6 +227,32 @@ app.post('/search-entries',bodyParser.json(), (req, res) => {
     });
 });
 
+app.post('/sort-entries-asc',bodyParser.json(), (req, res) => {
+    const id = req.body.id;
+    const page = req.body.page;
+    const limit = 6;
+    const offset = (page - 1)  * limit;
+    var totalPages;
+    var results = {};
+    var sqlCount = "SELECT `EntryNo`,"+
+                    " `Title`," +
+                    " `Content`," +
+                    " `CreatedTimestamp`"+
+                    " FROM `entries` WHERE `UserId` = '"+id+"'";
+
+    connection.query(sqlCount, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ "error": err });
+            res.end("Error occured.");
+        }
+        else {
+            totalPages = Math.ceil(result.length/limit);
+        }
+    });
+
+});
+
 
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`))
