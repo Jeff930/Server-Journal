@@ -329,13 +329,17 @@ app.post('/filter-entries', bodyParser.json(), (req, res) => {
         " `Title`," +
         " `Content`," +
         " `CreatedTimestamp`" +
-        " FROM `entries` WHERE `UserId` = '" + id + "' AND date(`CreatedTimestamp`) = '"+date+"'";
+        " FROM `entries` WHERE `UserId` = '" + id + 
+        "' AND date(`CreatedTimestamp`) = '"+date+
+        "' ORDER BY `CreatedTimestamp` DESC";
 
     var sql = "SELECT `EntryNo`," +
         " `Title`," +
         " `Content`," +
         " `CreatedTimestamp`" +
-        " FROM `entries` WHERE `UserId` = '" + id + "' AND date(`CreatedTimestamp`) = '"+date+"'"+
+        " FROM `entries` WHERE `UserId` = '" + id + 
+        "' AND date(`CreatedTimestamp`) = '"+date+
+        "' ORDER BY `CreatedTimestamp` DESC"+
         " LIMIT " + limit + " OFFSET " + offset;
 
     connection.query(sqlCount, (err, result) => {
