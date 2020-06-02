@@ -339,6 +339,25 @@ app.post('/filter-entries', bodyParser.json(), (req, res) => {
     });
 });
 
+app.post('/update-entry', bodyParser.json(), (req, res) => {
+    const form = req.body;
+    var sql = "UPDATE `entries` SET" +
+        " `Title` = '" + form.title + "'," +
+        " `Content` = '" + form.content + "'" +
+        "  WHERE `EntryNo` = '" + form.entryNo + "'";
+
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.log(err);
+            res.json({ "error": err });
+        }
+        else {
+            console.log("Result: ", result);
+            res.send(result);
+        }
+    });
+});
+
 app.get('/delete-entry/:id', (req, res) => {
     const id = req.params.id;
     var sql = "DELETE FROM `Entries` WHERE `EntryNo` = '"+id+"'";
