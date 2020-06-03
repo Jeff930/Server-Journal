@@ -132,7 +132,7 @@ app.post('/user-signup', bodyParser.json(), (req, res) => {
 app.post('/create-entry', bodyParser.json(), (req, res) => {
     const form = req.body;
     var sql = "INSERT INTO `entries` (`EntryNo`,`Title`, `Content`, `CreatedTimestamp`,`UserId`) " +
-        "VALUES (NULL, '" + form.Title + "','" + form.content + "',CURRENT_TIMESTAMP," +
+        "VALUES (NULL, '" + form.title + "','" + form.content + "',CURRENT_TIMESTAMP," +
         " '" + form.userId+ "')";
     connection.query(sql, (err, result) => {
         if (err) {
