@@ -241,53 +241,6 @@ app.post('/search-entries', bodyParser.json(), (req, res) => {
     });
 });
 
-app.post('/sort-entries-asc', bodyParser.json(), (req, res) => {
-    const id = req.body.id;
-    const page = req.body.page;
-    const limit = 6;
-    const offset = (page - 1) * limit;
-    var totalPages;
-    var results = {};
-    var sqlCount = "SELECT `EntryNo`," +
-        " `Title`," +
-        " `Content`," +
-        " `CreatedTimestamp`" +
-        " FROM `entries` WHERE `UserId` = '" + id + "'";
-
-    var sql = "SELECT `EntryNo`," +
-        " `Title`," +
-        " `Content`," +
-        " `CreatedTimestamp`" +
-        " FROM `entries` WHERE `UserId` = '" + id + "'" +
-        " ORDER BY `CreatedTimestamp` ASC" +
-        " LIMIT " + limit + " OFFSET " + offset;
-
-    connection.query(sqlCount, (err, result) => {
-        if (err) {
-            console.log(err);
-            res.json({ "error": err });
-            res.end("Error occured.");
-        }
-        else {
-            totalPages = Math.ceil(result.length / limit);
-        }
-    });
-
-    connection.query(sql, (err, rows) => {
-        if (err) {
-            console.log(err);
-            res.json({ "error": err });
-        }
-        else {
-            console.log(rows);
-            results['page'] = page;
-            results['totalPages'] = totalPages;
-            results['rows'] = rows;
-            res.send(results);
-        }
-    });
-});
-
 app.post('/filter-entries', bodyParser.json(), (req, res) => {
     const id = req.body.id;
     const page = req.body.page;
