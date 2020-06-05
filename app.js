@@ -67,22 +67,22 @@ app.get('/user-login/:form', (req, res) => {
     });
 });
 
-app.get('/user-details/:email', (req, res) => {
-    const email = req.params.email;
-    // console.log(email);
+app.get('/user-details/:userId', (req, res) => {
+    const userId = req.params.userId;
+    console.log(userId);
     var sql = "SELECT `UserId`," +
         " `UserName`," +
         " `FirstName`," +
         " `LastName`," +
         " `EmailAddress`" +
-        " FROM `users` WHERE `EmailAddress` = '" + email + "'";
+        " FROM `users` WHERE `UserId` = '" + userId + "'";
     connection.query(sql, (err, result) => {
         if (err) {
-            // console.log(err);
+            console.log(err);
             res.json({ "error": err });
         }
         else {
-            // console.log(result);
+            console.log(result);
             res.send(result);
         }
     });
