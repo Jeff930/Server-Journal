@@ -51,7 +51,7 @@ app.get('/user-login/:form', (req, res) => {
         " `UserName`," +
         " `FirstName`," +
         " `LastName`," +
-        " `EmailAddress`" +
+        " `EmailAddress`," +
         " `CreatedTimestamp`" +
         " FROM `users` WHERE `EmailAddress` = '" + form.email + "'" +
         " AND `Password` = '" + form.password + "'";
