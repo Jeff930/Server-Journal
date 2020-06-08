@@ -74,6 +74,7 @@ app.get('/user-details/:userId', (req, res) => {
         " `UserName`," +
         " `FirstName`," +
         " `LastName`," +
+        " `Birthdate`," +
         " `EmailAddress`" +
         " FROM `users` WHERE `UserId` = '" + userId + "'";
     connection.query(sql, (err, result) => {
@@ -95,6 +96,7 @@ app.post('/update-user-details', bodyParser.json(), (req, res) => {
         " `UserName` = '" + form.username + "'," +
         " `FirstName` = '" + form.firstname + "'," +
         " `LastName` = '" + form.lastname + "'," +
+        " `Birthdate` = '" + form.birthdate + "'," +
         " `EmailAddress` = '" + form.email + "'" +
         "  WHERE `UserId` = '" + form.userid + "'";
 
