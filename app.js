@@ -75,7 +75,9 @@ app.get('/user-details/:userId', (req, res) => {
         " `FirstName`," +
         " `LastName`," +
         " `Birthdate`," +
-        " `EmailAddress`" +
+        " `EmailAddress`," +
+        " `LifeVerse`," +
+        " `VerseContent`" +
         " FROM `users` WHERE `UserId` = '" + userId + "'";
     connection.query(sql, (err, result) => {
         if (err) {
@@ -97,7 +99,9 @@ app.post('/update-user-details', bodyParser.json(), (req, res) => {
         " `FirstName` = '" + form.firstname + "'," +
         " `LastName` = '" + form.lastname + "'," +
         " `Birthdate` = '" + form.birthdate + "'," +
-        " `EmailAddress` = '" + form.email + "'" +
+        " `EmailAddress` = '" + form.email + "'," +
+        " `LifeVerse` = '" + form.lifeverse + "'," +
+        " `VerseContent` = '" + form.versecontent + "'" +
         "  WHERE `UserId` = '" + form.userid + "'";
 
     connection.query(sql, (err, result) => {
@@ -315,6 +319,7 @@ app.post('/update-entry', bodyParser.json(), (req, res) => {
 
 app.get('/delete-entry/:id', (req, res) => {
     const id = req.params.id;
+    console.log(id);
     var sql = "DELETE FROM `Entries` WHERE `EntryNo` = '"+id+"'";
     connection.query(sql, (err, result) => {
         if (err) {
