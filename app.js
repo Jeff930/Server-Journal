@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 var mysql = require('mysql')
 const bodyParser = require('body-parser')
+const file = require("fs") 
 
 const port = process.env.PORT || 5000;
 
@@ -131,6 +132,7 @@ app.post('/user-signup', bodyParser.json(), (req, res) => {
 
 app.post('/create-entry', bodyParser.json(), (req, res) => {
     const form = req.body;
+    var images = form.images;
     var sql = "INSERT INTO `entries` (`EntryNo`,`Title`, `Content`, `CreatedTimestamp`,`UserId`) " +
         "VALUES (NULL, '" + form.title + "','" + form.content + "',CURRENT_TIMESTAMP," +
         " '" + form.userId+ "')";
@@ -141,7 +143,15 @@ app.post('/create-entry', bodyParser.json(), (req, res) => {
         }
         else {
             console.log(result);
-            res.send(result);
+            for (var i = 0;i<=images.length;i++ ){
+                var filename = result.EntryNo + i + ".jpeg";
+                var base64Data = req.rawBody.replace(/^data:image\/jpeg;base64,/, "");
+
+                file.writeFile(filename, base64Data, 'base64', function(err) {
+                    console.log(err);
+                });
+            }
+            res.send(images);
         }
     });
 });
