@@ -149,15 +149,17 @@ app.post('/create-entry', bodyParser.json(), (req, res) => {
         }
         else {
             console.log(result);
-            for (var i = 0;i<=images.length;i++ ){
-                var filename = result.EntryNo + i + ".jpeg";
-                var base64Data = req.rawBody.replace(/^data:image\/jpeg;base64,/, "");
+           // for (var i = 0;i<=images.length;i++ ){
+                var filename = result['insertId'] + '-' + '0' + ".jpeg";
+                var base64Data = JSON.parse(images)[0].replace(/^data:image\/jpeg;base64,/, "");
 
-                file.writeFile(filename, base64Data, 'base64', function(err) {
-                    console.log(err);
-                });
-            }
-            res.send(images);
+                res.send(base64Data);
+                // file.writeFile(filename, base64Data, 'base64', function(err) {
+                //     console.log(err);
+                //     res.send(err);
+                // });
+           // }
+            
         }
     });
 });
