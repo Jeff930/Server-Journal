@@ -3,6 +3,7 @@ const app = express()
 var mysql = require('mysql')
 const bodyParser = require('body-parser')
 const file = require("fs") 
+var atob = require('atob');
 
 const port = process.env.PORT || 5000;
 
