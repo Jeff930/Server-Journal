@@ -150,19 +150,19 @@ app.post('/create-entry', bodyParser.json(), (req, res) => {
         }
         else {
             console.log(result);
-           // for (var i = 0;i<=images.length;i++ ){
-                var filename = result['insertId'] + '-' + '0' + ".jpeg";
-                var base64Data = atob(JSON.parse(images)[0]).replace("-", "+").replace("_", "/");
-                base64Data = base64Data.replace(/^data:image\/jpeg;base64,/, "");
+        //    for (var i = 0;i<=images.length;i++ ){
+        //         var filename = result['insertId'] + '-' + images[i] + ".jpeg";
+        //         var base64Data = atob(JSON.parse(images)[0]).replace("-", "+").replace("_", "/");
+        //         base64Data = base64Data.replace(/^data:image\/jpeg;base64,/, "");
                 
-                file.writeFile(filename, base64Data, 'base64', function(err) {
-                    console.log(err);
-                   // base64Data = base64Data.replace("+", "-").replace("/", "_");
-                    res.send(base64Data);
+        //         file.writeFile(filename, base64Data, 'base64', function(err) {
+        //             console.log(err);
+        //            // base64Data = base64Data.replace("+", "-").replace("/", "_");
+        //             res.send(base64Data);
 
-                });
-          // }
-            
+        //         });
+        //    }  
+        res.send("this" + JSON.parse(images).length);
         }
     });
 });
