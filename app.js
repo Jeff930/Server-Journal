@@ -4,6 +4,7 @@ var mysql = require('mysql')
 const bodyParser = require('body-parser')
 const file = require("fs") 
 var atob = require('atob');
+const path = require('path');
 
 const port = process.env.PORT || 5000;
 
@@ -150,19 +151,33 @@ app.post('/create-entry', bodyParser.json(), (req, res) => {
         }
         else {
             console.log(result);
-        //    for (var i = 0;i<=images.length;i++ ){
-        //         var filename = result['insertId'] + '-' + images[i] + ".jpeg";
-        //         var base64Data = atob(JSON.parse(images)[0]).replace("-", "+").replace("_", "/");
-        //         base64Data = base64Data.replace(/^data:image\/jpeg;base64,/, "");
-                
-        //         file.writeFile(filename, base64Data, 'base64', function(err) {
-        //             console.log(err);
-        //            // base64Data = base64Data.replace("+", "-").replace("/", "_");
-        //             res.send(base64Data);
+            
+            var entryDir ='./images/entries/' + result['insertId'];
+                file.access(entryDir, function(err) {
+                    if (err.code === 'ENOENT') {
+                        file.mkdir(entryDir,function(err){
+                            if (err) {
+                                res.send(err);
+                            }
+                           console.log("Directory created successfully!");
+                        });
+                    }
+                });
 
-        //         });
-        //    }  
-        res.send("this" + JSON.parse(images).length);
+                
+
+           for (var i = 0;i<JSON.parse(images).length;i++ ){
+                var filename = result['insertId'] + '-' + i + ".jpeg";
+                var base64Data = atob(JSON.parse(images)[i]).replace("-", "+").replace("_", "/");
+                base64Data = base64Data.replace(/^data:image\/jpeg;base64,/, "");
+                
+                var filePath = entryDir+'/'+filename;
+                 
+                file.writeFile(filePath, base64Data, 'base64', function(err) {
+                    res.send(err);
+                });
+           }  
+           res.send("Saved");
         }
     });
 });
