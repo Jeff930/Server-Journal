@@ -158,26 +158,29 @@ app.post('/create-entry', bodyParser.json(), (req, res) => {
                         file.mkdir(entryDir,function(err){
                             if (err) {
                                 res.send(err);
+                            } else{
+                                console.log("Directory created successfully!");
+                                for (var i = 0;i<JSON.parse(images).length;i++ ){
+                                    var filename = result['insertId'] + '-' + i + ".jpeg";
+                                    var base64Data = atob(JSON.parse(images)[i]).replace("-", "+").replace("_", "/");
+                                    base64Data = base64Data.replace(/^data:image\/jpeg;base64,/, "");
+                                    
+                                    var filePath = entryDir+'/'+filename;
+                    
+                                    file.writeFile(filePath, base64Data, 'base64', function(err) {
+                                        if(err===null){
+                                            console.log("Files Created Successfully!");
+                                        }else{
+                                            console.log("Error Encountered: ",err);
+                                        }
+                                    });
+                               }  
                             }
-                           console.log("Directory created successfully!");
+                           
                         });
                     }
                 });
-
-                
-
-           for (var i = 0;i<JSON.parse(images).length;i++ ){
-                var filename = result['insertId'] + '-' + i + ".jpeg";
-                var base64Data = atob(JSON.parse(images)[i]).replace("-", "+").replace("_", "/");
-                base64Data = base64Data.replace(/^data:image\/jpeg;base64,/, "");
-                
-                var filePath = entryDir+'/'+filename;
-                 
-                file.writeFile(filePath, base64Data, 'base64', function(err) {
-                    res.send(err);
-                });
-           }  
-           res.send("Saved");
+           res.send('{"Success": true}');
         }
     });
 });
