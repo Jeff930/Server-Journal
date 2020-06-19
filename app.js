@@ -151,7 +151,6 @@ app.post('/create-entry', bodyParser.json(), (req, res) => {
         }
         else {
             console.log(result);
-            
             var entryDir ='./images/entries/' + result['insertId'];
                 file.access(entryDir, function(err) {
                     if (err.code === 'ENOENT') {
